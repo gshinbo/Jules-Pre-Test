@@ -1,0 +1,62 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff; /* AliceBlue */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #2c3e50; /* Dark Slate Gray */
+    margin-bottom: 20px;
+}
+
+#game-board {
+    width: 300px; /* Example: 10 blocks wide * 30px/block */
+    height: 600px; /* Example: 20 blocks high * 30px/block */
+    border: 5px solid #34495e; /* Wet Asphalt */
+    background-color: #ecf0f1; /* Clouds */
+    margin-bottom: 20px;
+    position: relative; /* For positioning blocks inside */
+}
+
+#score-area {
+    font-size: 1.5em;
+    color: #e67e22; /* Carrot */
+    margin-bottom: 10px;
+}
+
+#next-tetromino-area {
+    width: 120px; /* Example: 4 blocks wide * 30px/block */
+    height: 120px; /* Example: 4 blocks high * 30px/block */
+    border: 3px solid #95a5a6; /* Concrete */
+    background-color: #ecf0f1; /* Clouds */
+    margin-bottom: 20px;
+}
+
+#instructions-area {
+    font-size: 0.9em;
+    color: #7f8c8d; /* Asbestos */
+    text-align: center;
+}
+
+.block {
+    width: 28px; /* Slightly smaller than grid cell for borders */
+    height: 28px; /* Slightly smaller than grid cell for borders */
+    border: 1px solid #bdc3c7; /* Silver */
+    position: absolute; /* Positioned by JavaScript */
+    box-sizing: border-box;
+}
+
+/* Example Tetromino colors (can be expanded) */
+.block-i { background-color: #3498db; } /* Peter River */
+.block-o { background-color: #f1c40f; } /* Sun Flower */
+.block-t { background-color: #9b59b6; } /* Amethyst */
+.block-s { background-color: #2ecc71; } /* Emerald */
+.block-z { background-color: #e74c3c; } /* Alizarin */
+.block-j { background-color: #34495e; } /* Wet Asphalt - re-using, consider a different blue */
+.block-l { background-color: #e67e22; } /* Carrot - re-using, consider a different orange */
