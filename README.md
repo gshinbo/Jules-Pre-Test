@@ -22,6 +22,7 @@ Use the arrow keys on your keyboard to control the falling tetrominoes:
 *   **Right Arrow Key**: Move the tetromino to the right.
 *   **Down Arrow Key**: Soft drop - move the tetromino down faster.
 *   **Up Arrow Key**: Rotate the tetromino clockwise.
+*   **Space Key**: Hard drop - instantly drops the tetromino to the bottom.
 
 ## Objective
 

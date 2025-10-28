@@ -15,27 +15,43 @@ h1 {
     margin-bottom: 20px;
 }
 
+#game-container {
+    display: flex;
+    align-items: flex-start; /* Align items to the top */
+    gap: 20px; /* Spacing between game-board and info-panel */
+    margin-bottom: 20px; /* Space before instructions */
+}
+
 #game-board {
     width: 300px; /* Example: 10 blocks wide * 30px/block */
     height: 600px; /* Example: 20 blocks high * 30px/block */
     border: 5px solid #34495e; /* Wet Asphalt */
     background-color: #ecf0f1; /* Clouds */
-    margin-bottom: 20px;
+    margin-bottom: 0; /* Now controlled by game-container gap or info-panel */
     position: relative; /* For positioning blocks inside */
+}
+
+#info-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items like next-tetromino and score */
+    width: 150px; /* Define a width for the panel */
 }
 
 #score-area {
     font-size: 1.5em;
     color: #e67e22; /* Carrot */
-    margin-bottom: 10px;
+    margin-bottom: 0; /* Spacing managed by info-panel flex container */
 }
 
 #next-tetromino-area {
     width: 120px; /* Example: 4 blocks wide * 30px/block */
     height: 120px; /* Example: 4 blocks high * 30px/block */
-    border: 3px solid #95a5a6; /* Concrete */
-    background-color: #ecf0f1; /* Clouds */
-    margin-bottom: 20px;
+    border: 2px solid #333;
+    background-color: #f8f8f8;
+    position: relative;
+    padding: 5px;
+    margin-bottom: 10px; /* Space between next tetromino and score */
 }
 
 #instructions-area {
