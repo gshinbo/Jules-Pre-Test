@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const gameBoardElement = document.getElementById('game-board');
     const scoreAreaElement = document.getElementById('score-area');
-    // const nextTetrominoAreaElement = document.getElementById('next-tetromino-area'); // Placeholder for future use
+    const nextTetrominoAreaElement = document.getElementById('next-tetromino-area');
 
     // Game constants
     const BOARD_WIDTH = 10;
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const TETROMINO_TYPES = Object.keys(TETROMINOS);
 
     let currentTetromino = null;
+    let nextTetromino = null;
     let currentPosition = { x: 0, y: 0 };
     let score = 0;
     let gameLoopInterval = null; // For gravity
@@ -81,6 +82,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function drawNextTetromino() {
+        if (!nextTetrominoAreaElement) return;
+        nextTetrominoAreaElement.innerHTML = ''; // Clear the area
+
+        if (!nextTetromino) return; // If there's no next tetromino, do nothing further
+
+        const { shape, color } = nextTetromino;
+
+        // Calculate padding from CSS (assuming 5px as per previous subtask)
+        const padding = 5; // px
+
+        // Effective dimensions of the area for placing blocks
+        const areaEffectiveWidth = nextTetrominoAreaElement.clientWidth - 2 * padding;
+        const areaEffectiveHeight = nextTetrominoAreaElement.clientHeight - 2 * padding;
+
+        const shapeWidthInPixels = shape[0].length * BLOCK_SIZE;
+        const shapeHeightInPixels = shape.length * BLOCK_SIZE;
+
+        // Calculate offsets to center the shape within the effective area
+        const offsetX = (areaEffectiveWidth - shapeWidthInPixels) / 2 + padding;
+        const offsetY = (areaEffectiveHeight - shapeHeightInPixels) / 2 + padding;
+
+        shape.forEach((row, yOffset) => {
+            row.forEach((value, xOffset) => {
+                if (value === 1) {
+                    const block = document.createElement('div');
+                    block.classList.add('block', color); // No 'falling' class
+                    block.style.left = `${xOffset * BLOCK_SIZE + offsetX}px`;
+                    block.style.top = `${yOffset * BLOCK_SIZE + offsetY}px`;
+                    block.style.width = `${BLOCK_SIZE - 2}px`; // Adjust for border
+                    block.style.height = `${BLOCK_SIZE - 2}px`; // Adjust for border
+                    nextTetrominoAreaElement.appendChild(block);
+                }
+            });
+        });
+    }
+
     // --- Tetromino Logic ---
     function getRandomTetromino() {
         const type = TETROMINO_TYPES[Math.floor(Math.random() * TETROMINO_TYPES.length)];
@@ -89,7 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function spawnNewTetromino() {
-        currentTetromino = getRandomTetromino();
+        currentTetromino = nextTetromino;
+        nextTetromino = getRandomTetromino();
+        drawNextTetromino(); // Update the display for the new next tetromino
+
         currentPosition = {
             x: Math.floor(BOARD_WIDTH / 2) - Math.floor(currentTetromino.shape[0].length / 2),
             y: 0
@@ -164,6 +205,15 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Tetromino rotated");
     }
 
+function hardDropTetromino() {
+    if (!currentTetromino) return;
+    while (isValidPosition(currentTetromino.shape, { x: currentPosition.x, y: currentPosition.y + 1 })) {
+        currentPosition.y++;
+    }
+    drawGameBoard(); // Update visual to the bottom-most valid spot
+    lockTetromino(); // Lock the piece in place
+}
+
     function lockTetromino() {
         if (!currentTetromino) return;
         currentTetromino.shape.forEach((row, y) => {
@@ -234,14 +284,10 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'ArrowUp':
                 rotateTetromino();
                 break;
-            // case ' ': // Space for hard drop (optional, simple version for now)
-            //     // while(isValidPosition(currentTetromino.shape, {x: currentPosition.x, y: currentPosition.y + 1})) {
-            //     //    currentPosition.y += 1;
-            //     // }
-            //     // lockTetromino();
-            //     // For simplicity, space can also be rotate or another action
-            //     // rotateTetromino(); // Or remove if space does nothing
-            //     break;
+            case ' ': // Spacebar for hard drop
+                hardDropTetromino();
+                event.preventDefault(); // Prevent page scrolling
+                break;
         }
     });
 
@@ -253,6 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
         score = 0;
         scoreAreaElement.textContent = `Score: ${score}`;
 
+        nextTetromino = getRandomTetromino(); // Generate the very first "next" tetromino
+        drawNextTetromino(); // Draw it for the first time
         spawnNewTetromino(); // Spawn the first piece
 
         if (gameLoopInterval) clearInterval(gameLoopInterval); // Clear existing loop if any
